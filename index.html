@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2.0 | 基于 ima 知识库内容梳理 & 运营助手</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231d6ee8'/%3E%3Cpath d='M18 22h28M18 32h22M18 42h28' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <style>
+    :root {
+      --ink: #071b32;
+      --text: #123254;
+      --muted: #60758d;
+      --soft: #8ba0b7;
+      --line: rgba(68, 111, 156, 0.18);
+      --blue: #1768df;
+      --cyan: #00a8d8;
+      --teal: #10a88a;
+      --amber: #f3a51d;
+      --panel: rgba(255, 255, 255, 0.82);
+      --shadow: 0 28px 70px rgba(28, 75, 124, 0.14);
+      --soft-shadow: 0 14px 36px rgba(41, 86, 130, 0.1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: "Segoe UI", "Microsoft YaHei UI", "PingFang SC", "Hiragino Sans GB", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(28, 103, 202, 0.055) 1px, transparent 1px),
+        linear-gradient(rgba(28, 103, 202, 0.055) 1px, transparent 1px),
+        linear-gradient(145deg, #fbfdff 0%, #eff7ff 48%, #f9fcff 100%);
+      background-size: 42px 42px, 42px 42px, auto;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      padding: 22px;
+      isolation: isolate;
+    }
+
+    .deck::before {
+      content: "";
+      position: fixed;
+      inset: 8% -10% -18% 42%;
+      z-index: -1;
+      background: radial-gradient(circle, rgba(0, 168, 216, 0.16), transparent 58%);
+      pointer-events: none;
+    }
+
+    .topbar {
+      position: fixed;
+      left: 34px;
+      right: 34px;
+      top: 22px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      pointer-events: none;
+    }
+
+    .brand,
+    .chapter {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 10px 26px rgba(40, 80, 120, 0.08);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand::before {
+      content: "";
+      width: 18px;
+      height: 18px;
+      border-radius: 6px;
+      background:
+        linear-gradient(var(--blue), var(--blue)) 4px 4px / 10px 2px no-repeat,
+        linear-gradient(var(--cyan), var(--cyan)) 4px 9px / 10px 2px no-repeat,
+        linear-gradient(var(--teal), var(--teal)) 4px 14px / 10px 2px no-repeat,
+        #eef6ff;
+      box-shadow: 0 0 0 8px rgba(29, 110, 232, 0.08);
+    }
+
+    .slides {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-items: center;
+      padding: 74px 72px 78px;
+      opacity: 0;
+      transform: translateX(4%) scale(0.985);
+      pointer-events: none;
+      transition: opacity 260ms ease, transform 260ms ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .slide-inner {
+      position: relative;
+      overflow: hidden;
+      width: min(100%, 1500px);
+      height: min(100%, 850px);
+      margin: 0 auto;
+      padding: 44px;
+      border: 1px solid rgba(42, 105, 168, 0.16);
+      border-radius: 30px;
+      background:
+        linear-gradient(120deg, rgba(255, 255, 255, 0.96), rgba(241, 248, 255, 0.88)),
+        linear-gradient(135deg, rgba(29, 110, 232, 0.1), rgba(16, 168, 138, 0.06));
+      box-shadow: var(--shadow);
+    }
+
+    .slide-inner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 0%, transparent 48%, rgba(29, 110, 232, 0.07) 49%, transparent 50%),
+        linear-gradient(0deg, transparent 0%, transparent 48%, rgba(29, 110, 232, 0.07) 49%, transparent 50%);
+      background-size: 120px 120px;
+      opacity: 0.42;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.85), transparent 84%);
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: grid;
+      gap: 24px;
+    }
+
+    .two-col {
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      align-items: center;
+    }
+
+    .title {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(42px, 5.2vw, 86px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    .section-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(34px, 3.7vw, 58px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      margin-bottom: 18px;
+      padding: 8px 12px;
+      border: 1px solid rgba(29, 110, 232, 0.18);
+      border-radius: 999px;
+      color: var(--blue);
+      background: rgba(255, 255, 255, 0.76);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--teal);
+      box-shadow: 0 0 0 5px rgba(16, 168, 138, 0.12);
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: clamp(17px, 1.4vw, 22px);
+      line-height: 1.85;
+    }
+
+    .metric-grid,
+    .card-grid,
+    .shot-grid,
+    .result-grid,
+    .future-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .metric-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 30px;
+    }
+
+    .metric,
+    .card,
+    .result,
+    .shot,
+    .video-card,
+    .process-item,
+    .future-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .metric {
+      min-height: 140px;
+      padding: 20px;
+    }
+
+    .metric strong {
+      display: block;
+      color: #0e4fb0;
+      font-size: clamp(34px, 3.4vw, 54px);
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .ai-console {
+      position: relative;
+      min-height: 470px;
+      border: 1px solid rgba(42, 105, 168, 0.16);
+      border-radius: 24px;
+      background:
+        linear-gradient(90deg, rgba(29, 110, 232, 0.08) 1px, transparent 1px),
+        linear-gradient(rgba(29, 110, 232, 0.08) 1px, transparent 1px),
+        radial-gradient(circle at 50% 48%, rgba(0, 168, 216, 0.24), transparent 35%),
+        linear-gradient(145deg, #ffffff, #edf7ff);
+      background-size: 34px 34px, 34px 34px, auto, auto;
+      box-shadow: var(--soft-shadow);
+    }
+
+    .ai-console::before,
+    .ai-console::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    .ai-console::before {
+      inset: 42px;
+      border: 1px dashed rgba(29, 110, 232, 0.22);
+      transform: rotate(-8deg);
+    }
+
+    .ai-console::after {
+      inset: 88px;
+      border: 1px solid rgba(16, 168, 138, 0.2);
+      transform: rotate(14deg);
+    }
+
+    .ai-core {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 150px;
+      height: 150px;
+      border: 1px solid rgba(29, 110, 232, 0.26);
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 24px 60px rgba(29, 110, 232, 0.18);
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .ai-core strong {
+      display: block;
+      color: #0e4fb0;
+      font-size: 38px;
+      line-height: 1;
+    }
+
+    .ai-core span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .ai-node {
+      position: absolute;
+      z-index: 3;
+      display: grid;
+      gap: 6px;
+      min-width: 146px;
+      padding: 13px 15px;
+      border: 1px solid rgba(29, 110, 232, 0.18);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 14px 34px rgba(41, 86, 130, 0.1);
+    }
+
+    .ai-node b {
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    .ai-node span {
+      color: var(--soft);
+      font-size: 12px;
+    }
+
+    .ai-node.n1 { left: 34px; top: 34px; }
+    .ai-node.n2 { right: 34px; top: 56px; }
+    .ai-node.n3 { left: 44px; bottom: 60px; }
+    .ai-node.n4 { right: 44px; bottom: 40px; }
+
+    .card-grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      min-height: 210px;
+      padding: 24px;
+    }
+
+    .card::before,
+    .future-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--teal), var(--amber));
+    }
+
+    .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(29, 110, 232, 0.16);
+      border-radius: 13px;
+      background: #f3f8ff;
+      color: var(--blue);
+      font-weight: 900;
+    }
+
+    .card h3,
+    .future-card h3 {
+      margin: 18px 0 0;
+      color: var(--text);
+      font-size: 24px;
+      line-height: 1.25;
+    }
+
+    .card p,
+    .future-card p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.72;
+    }
+
+    .process {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .process-item {
+      min-height: 180px;
+      padding: 20px;
+    }
+
+    .process-item strong {
+      display: block;
+      color: var(--blue);
+      font-size: 28px;
+    }
+
+    .process-item span {
+      display: block;
+      margin-top: 16px;
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    .process-item p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .case-layout {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      align-items: center;
+    }
+
+    .case-text {
+      align-self: center;
+    }
+
+    .case-label {
+      display: inline-flex;
+      align-items: center;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 999px;
+      color: var(--blue);
+      background: rgba(29, 110, 232, 0.08);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .case-title {
+      margin: 18px 0 0;
+      color: var(--ink);
+      font-size: clamp(32px, 3.4vw, 54px);
+      line-height: 1.12;
+    }
+
+    .case-copy {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    .result-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 22px;
+    }
+
+    .result {
+      padding: 16px;
+    }
+
+    .result strong {
+      display: block;
+      color: #0e4fb0;
+      font-size: 22px;
+    }
+
+    .result span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .shot-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .shot-grid.four {
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      height: 100%;
+      max-height: 660px;
+      align-self: center;
+    }
+
+    .shot {
+      min-height: 250px;
+      cursor: zoom-in;
+    }
+
+    .shot.compact {
+      min-height: 0;
+      height: 100%;
+    }
+
+    .shot.contain img {
+      padding: 10px;
+      background: #f8fbff;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .shot.tall {
+      min-height: 430px;
+    }
+
+    .shot.wide {
+      grid-column: span 2;
+      min-height: 430px;
+    }
+
+    .shot img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: inherit;
+      object-fit: cover;
+      object-position: top left;
+      transition: transform 220ms ease;
+    }
+
+    .shot:hover img {
+      transform: scale(1.02);
+    }
+
+    .solution-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(380px, 0.86fr);
+      gap: 18px;
+      align-items: stretch;
+      min-height: 340px;
+    }
+
+    .solution-body .process {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 0;
+    }
+
+    .solution-body .process-item {
+      min-height: 104px;
+      padding: 14px;
+    }
+
+    .solution-body .process-item:last-child {
+      grid-column: span 2;
+    }
+
+    .solution-body .process-item span {
+      margin-top: 8px;
+      font-size: 17px;
+    }
+
+    .solution-shot {
+      min-height: 340px;
+      height: 340px;
+    }
+
+    .solution-shot img {
+      min-height: 0;
+    }
+
+    .caption {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      max-width: calc(100% - 24px);
+      padding: 8px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.62);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.88);
+      color: #26425f;
+      font-size: 12px;
+      font-weight: 800;
+      backdrop-filter: blur(10px);
+      pointer-events: none;
+    }
+
+    .ops-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .ops-grid .shot,
+    .ops-grid .video-card {
+      min-height: 215px;
+    }
+
+    .video-card {
+      display: grid;
+      place-items: center;
+      padding: 0;
+      background: #000;
+    }
+
+    .video-card video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 0;
+      background: #000;
+    }
+
+    .future-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 28px;
+    }
+
+    .future-card {
+      min-height: 235px;
+      padding: 26px;
+    }
+
+    .controls {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 12px 30px rgba(40, 80, 120, 0.12);
+      backdrop-filter: blur(16px);
+      transform: translateX(-50%);
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(29, 110, 232, 0.18);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--blue);
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .dots {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .dot-btn {
+      width: 9px;
+      height: 9px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: #bfd2e8;
+      cursor: pointer;
+      transition: width 180ms ease, background 180ms ease;
+    }
+
+    .dot-btn.active {
+      width: 26px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+    }
+
+    .counter {
+      min-width: 52px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      background: rgba(7, 20, 34, 0.78);
+      backdrop-filter: blur(18px);
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox-panel {
+      width: min(1180px, 100%);
+      max-height: calc(100vh - 60px);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.28);
+    }
+
+    .lightbox-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      min-height: 52px;
+      padding: 0 14px 0 18px;
+      border-bottom: 1px solid var(--line);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .lightbox-close {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(29, 110, 232, 0.18);
+      border-radius: 12px;
+      background: #f3f8ff;
+      color: var(--blue);
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .lightbox-body {
+      overflow: auto;
+      max-height: calc(100vh - 112px);
+      padding: 18px;
+      background: #f5f8fc;
+    }
+
+    .lightbox img {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      max-height: calc(100vh - 150px);
+      margin: 0 auto;
+      border-radius: 14px;
+      box-shadow: 0 12px 28px rgba(20, 48, 78, 0.12);
+    }
+
+    @media (max-width: 980px) {
+      html, body {
+        overflow: auto;
+      }
+
+      .deck {
+        height: auto;
+        min-height: 100vh;
+        padding: 12px;
+      }
+
+      .topbar {
+        position: static;
+        margin: 0 0 12px;
+      }
+
+      .slides,
+      .slide,
+      .slide-inner,
+      .content {
+        position: static;
+        height: auto;
+      }
+
+      .slide {
+        display: none;
+        padding: 0 0 80px;
+        transform: none;
+      }
+
+      .slide.active {
+        display: block;
+      }
+
+      .slide-inner {
+        padding: 24px;
+      }
+
+      .two-col,
+      .case-layout,
+      .solution-body,
+      .metric-grid,
+      .card-grid.three,
+      .process,
+      .shot-grid,
+      .ops-grid,
+      .future-grid,
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .title {
+        font-size: 42px;
+      }
+
+      .section-title,
+      .case-title {
+        font-size: 34px;
+      }
+
+      .shot.wide {
+        grid-column: span 1;
+      }
+
+      .shot-grid.four {
+        height: auto;
+        max-height: none;
+      }
+
+      .shot.compact {
+        min-height: 240px;
+      }
+
+      .solution-body .process-item:last-child {
+        grid-column: span 1;
+      }
+
+      .controls {
+        bottom: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <header class="topbar">
+      <div class="brand">ima Knowledge Ops Assistant</div>
+      <div class="chapter" id="chapterLabel">01 / 封面</div>
+    </header>
+
+    <main class="slides" id="slides">
+      <section class="slide active" data-chapter="封面">
+        <div class="slide-inner">
+          <div class="content two-col">
+            <div>
+              <div class="eyebrow">AI 应用大赛路演作品展示</div>
+              <h1 class="title">基于 ima 知识库的内容梳理 & 运营助手</h1>
+              <p class="lead">把项目资料、李中莹老师理论体系、NLP 技巧内容与运营素材沉淀进知识库，让 AI 在具体工作场景中完成内容梳理、方案创作、社群大纲、助教话术与二创文案生产。</p>
+              <div class="metric-grid">
+                <div class="metric"><strong>1 分钟</strong><span>生成 1 个 NLP 技巧的完整结构化介绍，替代大量资料阅读和手工整理。</span></div>
+                <div class="metric"><strong>3 分钟</strong><span>从一手资料提炼用户画像，并输出练习场景设计维度。</span></div>
+                <div class="metric"><strong>800+</strong><span>“3 分钟学一个技巧”视频号专栏 10 条视频带来涨粉成果。</span></div>
+              </div>
+            </div>
+            <div class="ai-console" aria-label="AI 知识库交互图">
+              <div class="ai-core"><div><strong>AI</strong><span>智能运营中枢</span></div></div>
+              <div class="ai-node n1"><b>知识库</b><span>书籍 / 文章 / 听记</span></div>
+              <div class="ai-node n2"><b>任务指令</b><span>结构化需求输入</span></div>
+              <div class="ai-node n3"><b>内容生成</b><span>大纲 / 话术 / 文案</span></div>
+              <div class="ai-node n4"><b>运营交付</b><span>社群 / 视频 / SOP</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-chapter="痛点">
+        <div class="slide-inner">
+          <div class="content">
+            <div>
+              <div class="eyebrow">Challenge</div>
+              <h2 class="section-title">原有工作痛点：专业度、效率、创意同时受限</h2>
+              <p class="lead">新知识体系下，单靠个人阅读和经验迁移，很难稳定产出高质量的内容和运营方案。</p>
+            </div>
+            <div class="card-grid three">
+              <article class="card"><span class="num">01</span><h3>专业度难以保证</h3><p>初步了解李中莹及 NLP 学问体系时，缺少足够知识沉淀，内容梳理容易不完整、不准确。</p></article>
+              <article class="card"><span class="num">02</span><h3>内容生成效率低</h3><p>需要花大量时间阅读、理解、拆解资料，再转化成产品展示和运营内容。</p></article>
+              <article class="card"><span class="num">03</span><h3>方案创意度受限</h3><p>过去经验很难快速结合理论体系，形成有依据、有新意的运营方案。</p></article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-chapter="方案">
+        <div class="slide-inner">
+          <div class="content">
+            <div>
+              <div class="eyebrow">Solution</div>
+              <h2 class="section-title">ima 知识库作为内容生成源，AI 工具协同放大产能</h2>
+              <p class="lead">不是让 AI 凭空生成内容，而是先把可信资料变成知识库，再通过清晰任务、多轮追问和结果沉淀，形成可复用内容资产。</p>
+            </div>
+            <div class="solution-body">
+              <div class="process">
+                <article class="process-item"><strong>01</strong><span>上传相关资料</span><p>书籍原文、公众号文章、线下听记、用户画像、运营素材。</p></article>
+                <article class="process-item"><strong>02</strong><span>任务建对话框</span><p>一个任务一个上下文，避免内容目标混杂。</p></article>
+                <article class="process-item"><strong>03</strong><span>输入任务要求</span><p>明确结构、对象、语气、输出格式和使用场景。</p></article>
+                <article class="process-item"><strong>04</strong><span>强调任务沉淀</span><p>把好结果转成模板、提示词和 SOP。</p></article>
+                <article class="process-item"><strong>05</strong><span>按需提问使用</span><p>在具体业务中持续调用和校准知识库。</p></article>
+              </div>
+              <div class="shot solution-shot"><img src="assets/knowledge-main-page.jpg" alt="知识库主页面" /><span class="caption">知识库主页面</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-chapter="技巧整理">
+        <div class="slide-inner">
+          <div class="content case-layout">
+            <div class="case-text">
+              <span class="case-label">Case 01</span>
+              <h2 class="case-title">技巧概念整理</h2>
+              <p class="case-copy">为刻意练习的前端展示批量生成结构化技巧介绍，包括技巧说明、核心原理、适用场景、效果示例、操作步骤和核心要点。</p>
+              <div class="result-grid">
+                <div class="result"><strong>专业准确</strong><span>内容来源于书中原始资料，减少理解偏差。</span></div>
+                <div class="result"><strong>1 分钟 / 个</strong><span>原本几十个技巧需 3-4 天整理，现在单个技巧分钟级生成。</span></div>
+              </div>
+            </div>
+            <div class="shot-grid four">
+              <div class="shot compact"><img src="assets/image1.png" alt="结构化技巧说明" /><span class="caption">结构化技巧说明</span></div>
+              <div class="shot compact"><img src="assets/image2.png" alt="前端展示内容" /><span class="caption">前端展示内容</span></div>
+              <div class="shot compact contain"><img src="assets/tech-example-breathing.png" alt="呼吸放松效果示例" /><span class="caption">呼吸放松效果示例</span></div>
+              <div class="shot compact contain"><img src="assets/tech-example-nlp12.png" alt="NLP 12 条前提假设" /><span class="caption">NLP 12 条前提假设</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-chapter="场景规则">
+        <div class="slide-inner">
+          <div class="content case-layout">
+            <div class="case-text">
+              <span class="case-label">Case 02</span>
+              <h2 class="case-title">辅助完成技巧实战练习场景规则设计</h2>
+              <p class="case-copy">基于线下会场一手听记资料与用户画像，提炼符合目标学员的场景维度，再喂给智能体生成更贴合人群画像的练习场景。</p>
+              <div class="result-grid">
+                <div class="result"><strong>3 分钟</strong><span>完成画像提炼与练习场景维度设计。</span></div>
+                <div class="result"><strong>更贴合用户</strong><span>让智能体生成的练习场景更接近真实学员处境。</span></div>
+              </div>
+            </div>
+            <div class="shot-grid">
+              <div class="shot wide"><img src="assets/image3.png" alt="用户画像与场景维度" /><span class="caption">用户画像与场景维度</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-chapter="主题编排">
+        <div class="slide-inner">
+          <div class="content case-layout">
+            <div class="case-text">
+              <span class="case-label">Case 03</span>
+              <h2 class="case-title">主题练习的技巧编排设计</h2>
+              <p class="case-copy">围绕李中莹老师知识体系，分析每个主题练习下编排技巧的内在逻辑，为主题练习设计提供可解释的内容方向。</p>
+              <div class="result-grid">
+                <div class="result"><strong>多轮设计</strong><span>通过与 AI 讨论形成更完整的编排逻辑。</span></div>
+                <div class="result"><strong>体系一致</strong><span>让主题练习与原有学习体系保持一致。</span></div>
+              </div>
+            </div>
+            <div class="shot-grid">
+              <div class="shot"><img src="assets/image4.png" alt="主题分析" /><span class="caption">主题分析</span></div>
+              <div class="shot"><img src="assets/image5.png" alt="技巧编排逻辑" /><span class="caption">技巧编排逻辑</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-chapter="运营创作">
+        <div class="slide-inner">
+          <div class="content case-layout">
+            <div class="case-text">
+              <span class="case-label">Case 04</span>
+              <h2 class="case-title">AI 李中莹运营相关内容创作</h2>
+              <p class="case-copy">建立运营知识库，协助完成 AI + 真人陪伴社群的课程大纲、专业助教话术、社群学习资料和播客/视频文案。</p>
+              <div class="result-grid">
+                <div class="result"><strong>1 天</strong><span>从社群主题到完整运营内容，原本 3-4 天的准备周期显著压缩。</span></div>
+                <div class="result"><strong>一人多岗</strong><span>一个运营即可兼顾社群运营与专业助教互动。</span></div>
+              </div>
+            </div>
+            <div class="ops-grid">
+              <div class="shot"><img src="assets/image6.png" alt="学习营课程大纲" /><span class="caption">学习营课程大纲</span></div>
+              <div class="shot"><img src="assets/image7.png" alt="课程大纲细化" /><span class="caption">课程大纲细化</span></div>
+              <div class="shot"><img src="assets/image8.png" alt="专业助教话术" /><span class="caption">专业助教话术</span></div>
+              <div class="shot"><img src="assets/image10.png" alt="学习资料二创" /><span class="caption">学习资料二创</span></div>
+              <div class="shot"><img src="assets/image12.png" alt="播客文案生成" /><span class="caption">播客文案生成</span></div>
+              <div class="video-card">
+                <video controls preload="metadata" poster="assets/image13.png" src="assets/meaning-reframe.mp4" aria-label="播客视频示例：意义换框法"></video>
+                <span class="caption">播客视频示例：意义换框法</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-chapter="公开知识库">
+        <div class="slide-inner">
+          <div class="content case-layout">
+            <div class="case-text">
+              <span class="case-label">Case 05</span>
+              <h2 class="case-title">使用公开知识库完成相关任务</h2>
+              <p class="case-copy">借助公开知识库辅助梳理 AI 流程设计相关问题，相当于给个人工作外挂一套可调用的知识体系。</p>
+              <div class="result-grid">
+                <div class="result"><strong>外挂知识体系</strong><span>快速获得高质量参考框架。</span></div>
+                <div class="result"><strong>高效高质</strong><span>基于资料调用大模型思考能力，生成所需内容。</span></div>
+              </div>
+            </div>
+            <div class="shot-grid">
+              <div class="shot wide"><img src="assets/image14.png" alt="AI 流程设计辅助" /><span class="caption">AI 流程设计辅助</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-chapter="迭代">
+        <div class="slide-inner">
+          <div class="content">
+            <div>
+              <div class="eyebrow">Next</div>
+              <h2 class="section-title">后续迭代：从个人助手走向团队共享知识生产系统</h2>
+              <p class="lead">当前方案已经验证个人内容与运营提效，下一步扩展到部门级知识协同和在线文档自动读写。</p>
+            </div>
+            <div class="future-grid">
+              <article class="future-card"><span class="num">01</span><h3>团队共享知识库</h3><p>围绕部门不同项目创建共享知识库，让项目资料、内容模板和优秀输出可复用。</p></article>
+              <article class="future-card"><span class="num">02</span><h3>Workbuddy 协同办公</h3><p>打通 ima 与腾讯在线文档的互相调用和读写，实现本地与云端 AI 协同办公。</p></article>
+              <article class="future-card"><span class="num">03</span><h3>持续沉淀 SOP</h3><p>把每次高质量输出反向沉淀成提示词、流程模板和运营素材，形成长期资产。</p></article>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="controls" aria-label="翻页控制">
+      <button class="nav-btn" id="prevBtn" type="button" aria-label="上一页">‹</button>
+      <div class="dots" id="dots"></div>
+      <div class="counter" id="counter">01 / 09</div>
+      <button class="nav-btn" id="nextBtn" type="button" aria-label="下一页">›</button>
+    </div>
+  </div>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="图片放大查看">
+    <div class="lightbox-panel" role="document">
+      <div class="lightbox-bar">
+        <span id="lightboxTitle">图片预览</span>
+        <button class="lightbox-close" type="button" aria-label="关闭图片预览">×</button>
+      </div>
+      <div class="lightbox-body">
+        <img id="lightboxImage" src="" alt="" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const dots = document.getElementById("dots");
+    const counter = document.getElementById("counter");
+    const chapterLabel = document.getElementById("chapterLabel");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    let current = 0;
+
+    slides.forEach((_, index) => {
+      const dot = document.createElement("button");
+      dot.className = "dot-btn";
+      dot.type = "button";
+      dot.setAttribute("aria-label", `跳转到第 ${index + 1} 页`);
+      dot.addEventListener("click", () => goTo(index));
+      dots.appendChild(dot);
+    });
+
+    const dotButtons = Array.from(document.querySelectorAll(".dot-btn"));
+
+    function pauseVideos() {
+      document.querySelectorAll("video").forEach((video) => {
+        if (!video.paused) video.pause();
+      });
+    }
+
+    function goTo(index) {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => slide.classList.toggle("active", slideIndex === current));
+      dotButtons.forEach((dot, dotIndex) => dot.classList.toggle("active", dotIndex === current));
+      counter.textContent = `${String(current + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+      chapterLabel.textContent = `${String(current + 1).padStart(2, "0")} / ${slides[current].dataset.chapter}`;
+      pauseVideos();
+    }
+
+    prevBtn.addEventListener("click", () => goTo(current - 1));
+    nextBtn.addEventListener("click", () => goTo(current + 1));
+
+    document.addEventListener("keydown", (event) => {
+      if (document.getElementById("lightbox").classList.contains("active")) return;
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
+        event.preventDefault();
+        goTo(current + 1);
+      }
+      if (event.key === "ArrowLeft" || event.key === "PageUp") {
+        event.preventDefault();
+        goTo(current - 1);
+      }
+      if (event.key === "Home") goTo(0);
+      if (event.key === "End") goTo(slides.length - 1);
+    });
+
+    goTo(0);
+
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightboxImage");
+    const lightboxTitle = document.getElementById("lightboxTitle");
+    const closeLightbox = document.querySelector(".lightbox-close");
+
+    const openPreview = (img, title) => {
+      lightboxImage.src = img.src;
+      lightboxImage.alt = img.alt || title || "图片预览";
+      lightboxTitle.textContent = title || img.alt || "图片预览";
+      lightbox.classList.add("active");
+      lightbox.setAttribute("aria-hidden", "false");
+    };
+
+    const closePreview = () => {
+      lightbox.classList.remove("active");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxImage.src = "";
+    };
+
+    document.querySelectorAll(".shot").forEach((shot) => {
+      const img = shot.querySelector("img");
+      const caption = shot.querySelector(".caption")?.textContent;
+      if (!img) return;
+      shot.setAttribute("tabindex", "0");
+      shot.setAttribute("role", "button");
+      shot.setAttribute("aria-label", `放大查看：${caption || img.alt || "图片"}`);
+      shot.addEventListener("click", () => openPreview(img, caption));
+      shot.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openPreview(img, caption);
+        }
+      });
+    });
+
+    closeLightbox.addEventListener("click", closePreview);
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closePreview();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && lightbox.classList.contains("active")) closePreview();
+    });
+  </script>
+</body>
+</html>
