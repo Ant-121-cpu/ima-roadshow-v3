@@ -541,6 +541,15 @@
       height: auto;
     }
 
+    .modal-tools {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 14px;
+      border-top: 2px solid var(--ink);
+      background: var(--paper);
+    }
+
     .close {
       width: 38px;
       height: 38px;
@@ -885,14 +894,15 @@
 
     function renderPhotos() {
       document.getElementById("photoGrid").innerHTML = photos.map((photo, index) => `
-        <button class="photo" type="button" data-photo="assets/photos/${photo}" aria-label="查看颁奖现场照片 ${index + 1}">
-          <img src="assets/photos/${photo}" alt="颁奖现场照片 ${index + 1}" loading="lazy">
+        <button class="photo" type="button" data-photo="assets/photos/previews/${photo}" data-original="assets/photos/${photo}" aria-label="查看颁奖现场照片 ${index + 1}">
+          <img src="assets/photos/thumbs/${photo}" alt="颁奖现场照片 ${index + 1}" loading="lazy" decoding="async">
         </button>
       `).join("");
       document.querySelectorAll("[data-photo]").forEach((button) => {
         button.addEventListener("click", () => {
           const src = button.dataset.photo;
-          openModal("颁奖现场", `<img src="${src}" alt="颁奖现场高清照片">`);
+          const original = button.dataset.original;
+          openModal("颁奖现场", `<img src="${src}" alt="颁奖现场高清照片"><div class="modal-tools"><a class="button primary" href="${original}" target="_blank" rel="noopener">查看原图</a></div>`);
         });
       });
     }
