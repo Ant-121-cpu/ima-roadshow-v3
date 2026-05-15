@@ -822,6 +822,7 @@
       const buttons = [];
       if (work.pdf) {
         buttons.push(`<button class="button primary" type="button" data-preview="${encodeURI(work.pdf)}" data-title="${escapeHtml(work.title)}">在线预览</button>`);
+        buttons.push(`<a class="button ghost" href="${work.pdf}" target="_blank" rel="noopener">打开PDF</a>`);
       }
       if (work.web) {
         buttons.push(`<a class="button primary" href="${work.web}" target="_blank" rel="noopener">打开作品</a>`);
@@ -856,6 +857,10 @@
         button.addEventListener("click", () => {
           const src = button.dataset.preview;
           const title = button.dataset.title || "PPT 预览";
+          if (window.matchMedia("(max-width: 680px)").matches || "ontouchstart" in window) {
+            window.open(src, "_blank", "noopener");
+            return;
+          }
           openModal(title, `<iframe src="${src}" title="${title}"></iframe>`);
         });
       });
