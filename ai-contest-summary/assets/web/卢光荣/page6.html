@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>迭代计划 - Claude Code提效实践</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #fff; min-height: 100vh; }
+        .nav-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(26, 26, 46, 0.95); backdrop-filter: blur(10px); z-index: 100; padding: 15px 30px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-links { list-style: none; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-links a { color: #a0a0a0; text-decoration: none; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; font-size: 0.9rem; }
+        .nav-links a:hover, .nav-links a.active { color: #00d9ff; background: rgba(0,217,255,0.1); }
+        .container { padding: 100px 50px 50px; max-width: 1200px; margin: 0 auto; }
+        h1 { font-size: 2.2rem; margin-bottom: 20px; background: linear-gradient(90deg, #00d9ff, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 1.5rem; color: #00d9ff; margin: 25px 0 15px; border-left: 4px solid #00d9ff; padding-left: 15px; }
+        h3 { font-size: 1.3rem; color: #00ff88; margin: 18px 0 10px; }
+        p { font-size: 1rem; line-height: 1.8; color: #e0e0e0; margin-bottom: 12px; }
+        li { font-size: 1rem; line-height: 1.8; color: #d0d0d0; padding: 6px 0; padding-left: 22px; position: relative; }
+        li::before { content: "▸"; color: #00d9ff; position: absolute; left: 0; }
+        .btn-next { display: inline-block; background: linear-gradient(90deg, #00d9ff, #00ff88); color: #1a1a2e; padding: 10px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 30px; transition: transform 0.3s; }
+        .btn-next:hover { transform: translateY(-3px); }
+        .btn-prev { display: inline-block; background: rgba(255,255,255,0.1); color: #fff; padding: 10px 25px; border-radius: 30px; text-decoration: none; margin-top: 30px; margin-right: 15px; transition: background 0.3s; }
+        .btn-prev:hover { background: rgba(255,255,255,0.2); }
+        .footer { text-align: center; padding: 25px; color: #888; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 50px; }
+        .timeline { position: relative; padding-left: 35px; margin: 25px 0; }
+        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, #00d9ff, #00ff88); }
+        .timeline-item { position: relative; margin-bottom: 25px; }
+        .timeline-item::before { content: ''; position: absolute; left: -31px; top: 3px; width: 12px; height: 12px; border-radius: 50%; background: #00d9ff; border: 3px solid #1a1a2e; }
+    </style>
+</head>
+<body>
+    <header class="nav-header">
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">封面</a></li>
+                <li><a href="page2.html">背景与痛点</a></li>
+                <li><a href="page3.html">提效操作</a></li>
+                <li><a href="page4.html">移动端</a></li>
+                <li><a href="page5.html">成果对比</a></li>
+                <li><a href="page6.html" class="active">迭代计划</a></li>
+                <li><a href="page7.html">总结</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>六、后续应用与迭代计划</h1>
+        <p>为进一步深化 Claude Code 在团队研发流程中的应用，制定以下迭代计划：</p>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>1. 专属模板与规范沉淀</h3>
+                <ul>
+                    <li>沉淀企业级项目的专属 Claude Code 提示词模板库，包含 CRUD 生成、单测编写、文档生成、规范检查等场景的标准化提示词，适配团队技术栈；</li>
+                    <li>将团队的代码规范、架构规范、安全规范喂给 Claude Code，让 AI 生成的代码完全贴合团队标准，减少二次修改成本；</li>
+                    <li>建立提示词迭代机制，定期收集团队反馈，优化模板效果。</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <h3>2. 全流程自动化串联</h3>
+                <ul>
+                    <li>打通需求 - 开发 - 测试 - 文档的端到端流程：从 Jira 需求自动生成设计文档→生成代码→生成单元测试→生成接口文档，实现全流程自动化提效；</li>
+                    <li>接入 CI/CD 流程，在代码提交前通过 Claude Code 自动完成规范检查、单测生成、漏洞扫描，提前发现问题；</li>
+                    <li>探索与内部研发平台的集成，让 Claude Code 成为团队研发流程的内置助手。</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <h3>3. 团队赋能与推广</h3>
+                <ul>
+                    <li>制定《Claude Code 团队使用规范与最佳实践手册》，覆盖各场景的使用方法、提示词模板和注意事项；</li>
+                    <li>开展团队内部培训和分享会，分享本次实践的提效经验，帮助所有开发人员快速上手；</li>
+                    <li>建立团队使用反馈通道，收集不同业务场景的痛点，持续优化提效方案。</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <h3>4. 进阶场景探索</h3>
+                <ul>
+                    <li>探索 Claude Code 在微服务架构改造、老旧系统重构、性能优化中的应用，比如让 AI 分析现有代码的性能瓶颈，给出优化方案；</li>
+                    <li>尝试基于 AI 接入到日志系统，可以让 AI 对错误日志进行分析，按错误等级提供不同的处理方案。</li>
+                </ul>
+            </div>
+        </div>
+
+        <a href="page5.html" class="btn-prev">← 上一页</a>
+        <a href="page7.html" class="btn-next">下一页 →</a>
+    </div>
+
+    <footer class="footer">
+        <p>Claude Code 企业级项目开发提效实践</p>
+    </footer>
+</body>
+</html>

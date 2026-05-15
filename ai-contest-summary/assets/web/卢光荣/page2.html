@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背景与痛点 - Claude Code提效实践</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #fff; min-height: 100vh; }
+        .nav-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(26, 26, 46, 0.95); backdrop-filter: blur(10px); z-index: 100; padding: 15px 30px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-links { list-style: none; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-links a { color: #a0a0a0; text-decoration: none; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; font-size: 0.9rem; }
+        .nav-links a:hover, .nav-links a.active { color: #00d9ff; background: rgba(0,217,255,0.1); }
+        .container { padding: 100px 50px 50px; max-width: 1200px; margin: 0 auto; }
+        h1 { font-size: 2.2rem; margin-bottom: 20px; background: linear-gradient(90deg, #00d9ff, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 1.5rem; color: #00d9ff; margin: 25px 0 15px; border-left: 4px solid #00d9ff; padding-left: 15px; }
+        p { font-size: 1rem; line-height: 1.8; color: #e0e0e0; margin-bottom: 12px; }
+        li { font-size: 1rem; line-height: 1.8; color: #d0d0d0; padding: 6px 0; padding-left: 22px; position: relative; }
+        li::before { content: "▸"; color: #00d9ff; position: absolute; left: 0; }
+        .btn-next { display: inline-block; background: linear-gradient(90deg, #00d9ff, #00ff88); color: #1a1a2e; padding: 10px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 30px; transition: transform 0.3s; }
+        .btn-next:hover { transform: translateY(-3px); }
+        .btn-prev { display: inline-block; background: rgba(255,255,255,0.1); color: #fff; padding: 10px 25px; border-radius: 30px; text-decoration: none; margin-top: 30px; margin-right: 15px; transition: background 0.3s; }
+        .btn-prev:hover { background: rgba(255,255,255,0.2); }
+        .footer { text-align: center; padding: 25px; color: #888; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 50px; }
+        .pain-point { background: rgba(255, 100, 100, 0.1); border-left: 4px solid #ff6b6b; padding: 18px 22px; margin: 12px 0; border-radius: 0 8px 8px 0; }
+        .pain-point-title { color: #ff6b6b; font-size: 1.1rem; font-weight: bold; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <header class="nav-header">
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">封面</a></li>
+                <li><a href="page2.html" class="active">背景与痛点</a></li>
+                <li><a href="page3.html">提效操作</a></li>
+                <li><a href="page4.html">移动端</a></li>
+                <li><a href="page5.html">成果对比</a></li>
+                <li><a href="page6.html">迭代计划</a></li>
+                <li><a href="page7.html">总结</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>一、项目背景</h1>
+        <p>为解决大企业级项目开发中重复劳动多、效率低、规范落地难、文档滞后等核心痛点，本次实践以某大型订单管理系统迭代开发为场景，引入 Claude Code IDE 原生 AI 编程助手，打造从需求设计到上线文档的全流程提效方案，验证 AI 工具对企业级项目研发效能的提升效果。</p>
+
+        <h1>二、使用场景与核心痛点</h1>
+
+        <h2>（一）核心使用场景</h2>
+        <p>本次实践覆盖企业级项目开发全流程的 4 类高频场景：</p>
+        <ul>
+            <li>基础 CRUD 模块开发</li>
+            <li>复杂业务逻辑开发（分布式事务、第三方接口对接、多表关联查询）</li>
+            <li>工程化治理与质量保障（代码规范检查、单元测试编写、漏洞修复）</li>
+            <li>技术文档维护（接口文档、模块设计文档、架构说明文档）</li>
+        </ul>
+
+        <h2>（二）传统开发模式下的核心痛点</h2>
+        <div class="pain-point">
+            <div class="pain-point-title">重复性编码工作繁重</div>
+            <p>大量的增删改查、接口封装、工具类编写消耗开发人员大量时间和精力</p>
+        </div>
+        <div class="pain-point">
+            <div class="pain-point-title">代码规范落地困难</div>
+            <p>团队代码风格不统一，人工Code Review成本高，难以系统性保证代码质量</p>
+        </div>
+        <div class="pain-point">
+            <div class="pain-point-title">单元测试覆盖率不足</div>
+            <p>边界场景覆盖不全，异常情况考虑不充分，线上bug率居高不下</p>
+        </div>
+        <div class="pain-point">
+            <div class="pain-point-title">技术文档维护滞后</div>
+            <p>接口文档与代码实现不同步，维护成本高，文档往往成为"一次性"文档</p>
+        </div>
+
+        <a href="index.html" class="btn-prev">← 上一页</a>
+        <a href="page3.html" class="btn-next">下一页 →</a>
+    </div>
+
+    <footer class="footer">
+        <p>Claude Code 企业级项目开发提效实践</p>
+    </footer>
+</body>
+</html>

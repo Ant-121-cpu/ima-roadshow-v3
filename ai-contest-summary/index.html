@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大智慧第一届 AI 应用大赛赛后总结</title>
+  <style>
+    :root {
+      --paper: #fff7e7;
+      --paper-2: #f4fbf3;
+      --ink: #181817;
+      --muted: #686058;
+      --hair: rgba(24, 24, 23, .18);
+      --teal: #00b8aa;
+      --blue: #276ef1;
+      --coral: #ff5b4f;
+      --sun: #ffbe2e;
+      --lime: #99d44a;
+      --pink: #f45aa3;
+      --violet: #8657ff;
+      --shadow: 0 22px 64px rgba(35, 29, 20, .16);
+      --sans: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --serif: "Songti SC", "STSong", "Noto Serif SC", serif;
+      --mono: "DIN Condensed", "Arial Narrow", "Impact", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--sans);
+      background:
+        radial-gradient(circle at 8% 6%, rgba(255,190,46,.32), transparent 22rem),
+        radial-gradient(circle at 88% 8%, rgba(0,184,170,.22), transparent 24rem),
+        radial-gradient(circle at 72% 48%, rgba(244,90,163,.14), transparent 28rem),
+        linear-gradient(135deg, var(--paper), var(--paper-2));
+      min-width: 320px;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .16;
+      background-image:
+        linear-gradient(rgba(24,24,23,.18) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(24,24,23,.18) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: linear-gradient(180deg, #000, transparent 82%);
+      z-index: -1;
+    }
+
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px clamp(16px, 4vw, 48px);
+      border-bottom: 2px solid var(--ink);
+      background: rgba(255, 247, 231, .92);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+
+    .brand i {
+      width: 10px;
+      height: 10px;
+      border: 2px solid var(--ink);
+      background: var(--coral);
+      box-shadow: 18px 0 0 var(--sun), 36px 0 0 var(--teal);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a,
+    .button {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border: 2px solid var(--ink);
+      background: #fff;
+      box-shadow: 4px 4px 0 var(--ink);
+      border-radius: 0;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+
+    .nav-links a:hover,
+    .button:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .button.primary { background: var(--sun); }
+    .button.teal { background: #c7f3ee; }
+    .button.ghost { background: transparent; }
+    .button.disabled {
+      cursor: not-allowed;
+      color: var(--muted);
+      background: #eee6d8;
+    }
+
+    .hero, .section {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: calc(100vh - 70px);
+      display: grid;
+      align-items: center;
+      padding: 56px 0 36px;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .topline::after {
+      content: "";
+      height: 2px;
+      background: var(--ink);
+      flex: 1;
+      opacity: .22;
+    }
+
+    .kicker {
+      display: inline-flex;
+      padding: 8px 14px;
+      border: 2px solid var(--ink);
+      background: var(--sun);
+      box-shadow: 8px 8px 0 var(--ink);
+      font-size: clamp(14px, 1.5vw, 18px);
+      font-weight: 900;
+      transform: rotate(-1.3deg);
+      margin-bottom: 28px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      max-width: 920px;
+      font-family: var(--serif);
+      font-size: clamp(52px, 9vw, 128px);
+      line-height: .94;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(34px, 5vw, 70px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      font-size: 22px;
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(18px, 2.1vw, 28px);
+      line-height: 1.55;
+      margin-top: 24px;
+      font-weight: 700;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 34px;
+      align-items: end;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .metric {
+      min-height: 142px;
+      border: 2px solid var(--ink);
+      background: #fff;
+      box-shadow: 8px 8px 0 var(--ink);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transform: rotate(var(--r, 0deg));
+    }
+
+    .metric:nth-child(1) { background: #fff0a8; --r: -1deg; }
+    .metric:nth-child(2) { background: #c7f3ee; --r: 1.1deg; }
+    .metric:nth-child(3) { background: #ffd4cc; --r: .8deg; }
+    .metric:nth-child(4) { background: #dff2b7; --r: -1.2deg; }
+    .metric b {
+      font-family: var(--mono);
+      font-size: clamp(48px, 7vw, 86px);
+      line-height: .85;
+    }
+    .metric span {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .section {
+      padding: 86px 0;
+      scroll-margin-top: 82px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 38px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 12px;
+      border: 2px solid var(--ink);
+      background: var(--c, #fff);
+      box-shadow: 4px 4px 0 var(--ink);
+      font-size: 12px;
+      font-weight: 1000;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      transform: rotate(var(--r, -1deg));
+    }
+
+    .card {
+      border: 2px solid var(--ink);
+      background: rgba(255,255,255,.84);
+      box-shadow: 8px 8px 0 var(--ink);
+      padding: 22px;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .review-card:nth-child(1) { background: #fff0a8; }
+    .review-card:nth-child(2) { background: #c7f3ee; }
+    .review-card:nth-child(3) { background: #ffd4cc; }
+    .review-card p,
+    .work-card p,
+    .tool-card p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+      font-weight: 700;
+      margin-top: 12px;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .step {
+      min-height: 118px;
+      border: 2px solid var(--ink);
+      background: #fff;
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 16px;
+    }
+
+    .step em {
+      display: block;
+      font-family: var(--mono);
+      font-size: 34px;
+      line-height: 1;
+      color: var(--c);
+      -webkit-text-stroke: 1px var(--ink);
+      font-style: normal;
+      margin-bottom: 8px;
+    }
+
+    .step b { display: block; font-size: 17px; line-height: 1.25; }
+
+    .group-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 34px 0 18px;
+    }
+
+    .group-title h3 {
+      min-width: max-content;
+      font-family: var(--serif);
+      font-size: clamp(26px, 3vw, 42px);
+    }
+
+    .group-title::after {
+      content: "";
+      height: 2px;
+      background: var(--ink);
+      flex: 1;
+      opacity: .18;
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .work-card {
+      min-height: 258px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #fff;
+      transform: rotate(var(--r, 0deg));
+    }
+
+    .work-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .num {
+      font-family: var(--mono);
+      font-size: 46px;
+      line-height: .82;
+      color: var(--c);
+      -webkit-text-stroke: 1px var(--ink);
+      flex: 0 0 auto;
+    }
+
+    .person {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .tool-card {
+      min-height: 246px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #fff;
+    }
+
+    .tool-name {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .tool-name strong {
+      font-family: var(--serif);
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    .share-panel {
+      margin-top: 22px;
+      background: #fff0a8;
+    }
+
+    .share-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .field { display: grid; gap: 8px; }
+    .field.full { grid-column: 1 / -1; }
+    label {
+      font-size: 13px;
+      font-weight: 1000;
+    }
+    input, textarea {
+      width: 100%;
+      border: 2px solid var(--ink);
+      background: rgba(255,255,255,.9);
+      color: var(--ink);
+      font: 700 15px/1.45 var(--sans);
+      padding: 12px 14px;
+      border-radius: 0;
+      outline: none;
+    }
+    textarea {
+      min-height: 112px;
+      resize: vertical;
+    }
+
+    .form-note {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 800;
+      margin-top: 12px;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .photo {
+      position: relative;
+      border: 2px solid var(--ink);
+      background: #fff;
+      box-shadow: 6px 6px 0 var(--ink);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      cursor: zoom-in;
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .24s ease;
+    }
+
+    .photo:hover img { transform: scale(1.04); }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(24,24,23,.78);
+    }
+
+    .modal.open { display: flex; }
+    .modal-panel {
+      width: min(1120px, 100%);
+      max-height: calc(100vh - 48px);
+      border: 2px solid var(--ink);
+      background: var(--paper);
+      box-shadow: 12px 12px 0 var(--ink);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 1000;
+    }
+
+    .modal-body {
+      min-height: 300px;
+      max-height: calc(100vh - 126px);
+      overflow: auto;
+      background: #fff;
+    }
+
+    .modal-body iframe {
+      width: 100%;
+      height: min(76vh, 820px);
+      border: 0;
+      display: block;
+    }
+
+    .modal-body img {
+      width: 100%;
+      height: auto;
+    }
+
+    .close {
+      width: 38px;
+      height: 38px;
+      border: 2px solid var(--ink);
+      background: var(--coral);
+      box-shadow: 3px 3px 0 var(--ink);
+      font-size: 22px;
+      font-weight: 1000;
+      cursor: pointer;
+    }
+
+    footer {
+      border-top: 2px solid var(--ink);
+      padding: 34px 16px;
+      color: var(--muted);
+      text-align: center;
+      font-weight: 800;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .section-head {
+        grid-template-columns: 1fr;
+      }
+      .work-grid,
+      .tool-grid,
+      .review-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .timeline,
+      .photo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .nav-links a {
+        min-height: 36px;
+        padding: 7px 10px;
+        font-size: 13px;
+      }
+      .hero { min-height: auto; padding-top: 44px; }
+      .metric-grid,
+      .work-grid,
+      .tool-grid,
+      .review-grid,
+      .timeline,
+      .photo-grid,
+      .share-form {
+        grid-template-columns: 1fr;
+      }
+      .section { padding: 62px 0; scroll-margin-top: 132px; }
+      .modal { padding: 12px; }
+      .modal-panel { max-height: calc(100vh - 24px); }
+      .modal-body iframe { height: 70vh; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="页面导航">
+    <div class="brand"><i></i><span>大智慧 AI 应用大赛</span></div>
+    <div class="nav-links">
+      <a href="#review">赛事回顾</a>
+      <a href="#works">路演作品</a>
+      <a href="#tools">AI工具推荐</a>
+      <a href="#awards">颁奖现场</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <div class="topline"><span>DAZHUIHUI AI APPLICATION CONTEST</span><span>2026.05</span></div>
+      <div class="hero-grid">
+        <div>
+          <div class="kicker">第一届 AI 应用大赛赛后总结</div>
+          <h1>让 AI 实践长出组织影响力</h1>
+          <p class="lead">这不只是一场比赛的成果展示，更是公司在 AI 提效道路上，从积极探索迈向业务落地的一次集中复盘。</p>
+          <div class="actions">
+            <a class="button primary" href="#works">浏览路演作品</a>
+            <a class="button teal" href="#tools">查看工具推荐</a>
+          </div>
+        </div>
+        <div class="metric-grid" aria-label="赛事关键数字">
+          <div class="metric"><b>66</b><span>参赛作品 / 份</span></div>
+          <div class="metric"><b>10</b><span>覆盖部门 / 个</span></div>
+          <div class="metric"><b>14</b><span>现场路演 / 个</span></div>
+          <div class="metric"><b>26</b><span>精选照片 / 张</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="review">
+      <div class="section-head">
+        <div>
+          <span class="tag" style="--c:#fff0a8">EVENT REVIEW</span>
+          <h2>赛事回顾</h2>
+        </div>
+        <p class="lead">从个人岗位提效，到团队流程、部门协作与组织能力共创，AI 已经开始进入真实业务现场。</p>
+      </div>
+
+      <div class="review-grid">
+        <article class="card review-card">
+          <h3>从积极探索到业务落地</h3>
+          <p>本届大赛让 AI 不再停留在概念层面，而是进入产品研发、内容生产、运营协同、客户服务、销售触达、人事行政、财务管理等多个工作场景。</p>
+        </article>
+        <article class="card review-card">
+          <h3>让一线好方法被看见</h3>
+          <p>66 份作品覆盖 10 个部门，展示了大家发现问题、拆解场景、主动尝试的实践能力，也让不同部门之间可以互相启发、互相借鉴。</p>
+        </article>
+        <article class="card review-card">
+          <h3>沉淀可复用的组织能力</h3>
+          <p>路演让优秀实践从个人经验走向团队共享，后续可继续把标杆作品和方法方案沉淀下来，推动 AI 真正嵌入关键岗位、关键流程与关键协同场景。</p>
+        </article>
+      </div>
+
+      <div class="timeline">
+        <div class="step" style="--c:#00b8aa"><em>01</em><b>个人作品路演</b></div>
+        <div class="step" style="--c:#ffbe2e"><em>02</em><b>团队代表作路演</b></div>
+        <div class="step" style="--c:#276ef1"><em>03</em><b>现场分享与交流</b></div>
+        <div class="step" style="--c:#f45aa3"><em>04</em><b>颁奖与赛后沉淀</b></div>
+      </div>
+    </section>
+
+    <section class="section" id="works">
+      <div class="section-head">
+        <div>
+          <span class="tag" style="--c:#c7f3ee;--r:1deg">ROADSHOW WORKS</span>
+          <h2>路演作品</h2>
+        </div>
+        <p class="lead">沿用路演大会的内容结构，集中浏览个人作品与团队代表作。PPT 作品支持 PDF 在线预览和源文件下载。</p>
+      </div>
+
+      <div class="group-title"><h3>个人作品路演</h3></div>
+      <div class="work-grid" id="personalWorks"></div>
+
+      <div class="group-title"><h3>团队代表作路演</h3></div>
+      <div class="work-grid" id="teamWorks"></div>
+    </section>
+
+    <section class="section" id="tools">
+      <div class="section-head">
+        <div>
+          <span class="tag" style="--c:#ffd4cc">AI TOOLKIT</span>
+          <h2>AI工具推荐</h2>
+        </div>
+        <p class="lead">亲测好用、不折腾、直接帮省时间的 AI 工具，适合日常办公。</p>
+      </div>
+      <div class="tool-grid" id="toolGrid"></div>
+      <article class="card share-panel">
+        <span class="tag" style="--c:#fff;--r:1deg">SHARE</span>
+        <h3>分享你觉得好用的 AI 工具</h3>
+        <p class="form-note">分享结构固定为工具名、介绍、官网、分享人。点击提交后会整理并复制填写内容，然后打开腾讯文档收集表。</p>
+        <form class="share-form" id="shareForm">
+          <div class="field">
+            <label for="shareTool">工具名</label>
+            <input id="shareTool" name="tool" placeholder="例如：某个 AI 办公工具" required>
+          </div>
+          <div class="field">
+            <label for="shareUrl">官网</label>
+            <input id="shareUrl" name="url" type="url" placeholder="https://..." required>
+          </div>
+          <div class="field">
+            <label for="shareName">分享人</label>
+            <input id="shareName" name="person" placeholder="请输入你的名字" required>
+          </div>
+          <div class="field full">
+            <label for="shareIntro">介绍</label>
+            <textarea id="shareIntro" name="intro" placeholder="适合什么人、解决什么问题、为什么推荐" required></textarea>
+          </div>
+          <div class="actions field full">
+            <button class="button primary" type="submit">提交到收集表</button>
+            <button class="button ghost" type="reset">清空</button>
+          </div>
+        </form>
+      </article>
+    </section>
+
+    <section class="section" id="awards">
+      <div class="section-head">
+        <div>
+          <span class="tag" style="--c:#dff2b7;--r:-1deg">AWARDS MOMENTS</span>
+          <h2>颁奖现场</h2>
+        </div>
+        <p class="lead">记录优秀作品被看见的时刻，也记录这场 AI 提效行动的共同参与感。</p>
+      </div>
+      <div class="photo-grid" id="photoGrid"></div>
+    </section>
+  </main>
+
+  <footer>大智慧第一届 AI 应用大赛 · 让优秀实践被看见，让可复用方法继续生长</footer>
+
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div class="modal-title" id="modalTitle">预览</div>
+        <button class="close" type="button" id="modalClose" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const TENCENT_FORM_URL = "https://docs.qq.com/sheet/DZXRuaW5ua0VYTEho?tab=BB08J2";
+
+    const colors = ["#00b8aa", "#ffbe2e", "#ff5b4f", "#99d44a", "#276ef1", "#f45aa3", "#8657ff"];
+
+    const works = [
+      { group: "personal", no: "01", person: "鞠睿琪", dept: "智能平台项目组", title: "AI听记智能总结 + 智能周报/月报", pdf: "assets/pdf/AI应用大赛路演PPT——睿琪.pdf", ppt: "assets/ppt/AI应用大赛路演PPT——睿琪.pptx" },
+      { group: "personal", no: "02", person: "刘一帆", dept: "培训课产品项目组", title: "ComfyUI 一键生图", pdf: "assets/pdf/刘一帆-comfyui生图.pdf", ppt: "assets/ppt/刘一帆-comfyui生图.pptx" },
+      { group: "personal", no: "03", person: "周梦培", dept: "心理智能产品项目组", title: "基于 Agent 团队批量测试和校验", web: "https://zmp19950530-byte.github.io/qinzhiliao-behavior-demo/ai-method-demo/?v=c3be032b" },
+      { group: "personal", no: "04", person: "刘瑞", dept: "心理智能产品项目组", title: "基于 ima 知识库内容梳理 & 运营助手", web: "assets/web/ima-roadshow-v3/index.html" },
+      { group: "personal", no: "05", person: "张志颖", dept: "智能平台项目组", title: "AI 协助产品原型工作流程", pdf: "assets/pdf/AI辅助产品工作提效实践_张志颖.pdf", ppt: "assets/ppt/AI辅助产品工作提效实践_张志颖.pptx" },
+      { group: "personal", no: "06", person: "温宇婷", dept: "合作伙伴运营部", title: "巴拉佳儿童学习力测评报告自动生成", pdf: "assets/pdf/温宇婷-AI应用大赛-PPT展示.pdf", ppt: "assets/ppt/温宇婷-AI应用大赛-PPT展示.pptx" },
+      { group: "personal", no: "07", person: "陈路", dept: "心理智能产品项目组", title: "用户画像 AI 爬虫 + 可视化分析", web: "https://lulu1373.github.io/xhs-demo-showcase/social_user_profile_skill_visual/" },
+      { group: "personal", no: "08", person: "黄乙洋", dept: "销售部", title: "如何更科学地编辑群发内容", pdf: "assets/pdf/黄乙洋：赋能群发内容编辑—推广提效方案.pdf", ppt: "assets/ppt/黄乙洋：赋能群发内容编辑—推广提效方案.pptx" },
+      { group: "personal", no: "09", person: "邱锦连", dept: "客户运营部", title: "AI 应用之飞书多维表格助教积分查询系统", pdf: "assets/pdf/邱锦连-助教积分管理系统.pdf", ppt: "assets/ppt/邱锦连-助教积分管理系统.pptx" },
+      { group: "personal", no: "10", person: "李瑞莲", dept: "培训课产品项目组", title: "AI 赋能课程研发：高效内容生产实践", pdf: "assets/pdf/11-李瑞莲-AI赋能课程研发.pdf", ppt: "assets/ppt/11-李瑞莲-AI赋能课程研发.pptx" },
+      { group: "personal", no: "11", person: "卢光荣", dept: "智能平台项目组", title: "50% 提效：AI 身份切换驱动的研发新规范", web: "assets/web/卢光荣/index.html" },
+      { group: "team", no: "12", person: "陈路", dept: "心理智能产品项目组", title: "基于飞书自建应用的团队 AI 助手“小龙虾”", web: "assets/web/openclaw-feishu-report/index.html" },
+      { group: "team", no: "13", person: "陈均潮", dept: "智能平台项目组", title: "基于 OpenClaw 的数据分析师", pdf: "assets/pdf/AI应用大赛-陈均潮.pdf", ppt: "assets/ppt/AI应用大赛-陈均潮.pptx" },
+      { group: "team", no: "14", person: "戚日柳", dept: "培训课产品项目组", title: "解读稿排版 AI 优化", pdf: "assets/pdf/AI大赛路演PPT.pdf", ppt: "assets/ppt/AI大赛路演PPT.pptx" }
+    ];
+
+    const tools = [
+      { name: "ima", url: "https://ima.qq.com", intro: "腾讯推出的AI智能知识工作台，适合个人/团队搭建专属知识库，支持多格式文件（PDF/Word/图片等）导入、AI智能问答、内容解读与辅助写作，深度打通微信生态，免费好用。" },
+      { name: "seede", url: "https://seede.ai", intro: "AI驱动的智能设计工具，适合不会设计的职场人/自媒体，一句话生成可编辑海报、PPT、长图等，支持PSD/PPTX导出，中文友好、网页端即用。" },
+      { name: "workbuddy", url: "https://www.codebuddy.cn/work", intro: "腾讯云推出的桌面办公Agent，适合职场人自动化处理繁琐工作，自然语言指令即可自动生成文档/表格/PPT、分析数据、批量处理文件，免部署安装即用。" },
+      { name: "trae", url: "https://trae.ai-kit.cn", intro: "字节跳动推出的AI原生编程IDE，适合开发者/零基础人群，支持自然语言生成完整项目、代码补全、调试优化，多模型切换，中文适配、完全免费。" },
+      { name: "get笔记", url: "https://www.biji.com", intro: "得到团队推出的AI笔记工具，适合会议记录、内容创作、知识整理，支持语音/图片/链接一键转结构化笔记、逐字稿生成，多端同步、智能分类。" },
+      { name: "飞书aily", url: "https://aily.feishu.cn", intro: "飞书官方智能助手，适合企业/团队深度办公提效，开箱即用，可处理消息、生成文档/PPT、总结会议纪要、检索企业知识，融入飞书全工作流。" }
+    ];
+
+    const photos = [
+      "BQ3A1162.jpg", "BQ3A1164.jpg", "BQ3A1185.jpg", "BQ3A1209.jpg", "BQ3A1224.jpg", "BQ3A1238.jpg",
+      "BQ3A1247.jpg", "BQ3A1254.jpg", "BQ3A1279.jpg", "BQ3A1285.jpg", "BQ3A1300.jpg", "BQ3A1321.jpg",
+      "BQ3A1323.jpg", "BQ3A1331.jpg", "BQ3A1350.jpg", "BQ3A1354.jpg", "BQ3A1381.jpg", "BQ3A1384.jpg",
+      "BQ3A1395.jpg", "BQ3A1397.jpg", "BQ3A1409.jpg", "BQ3A1419.jpg", "BQ3A1428.jpg", "BQ3A1436.jpg",
+      "BQ3A1442.jpg", "BQ3A1444.jpg"
+    ];
+
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    const modalClose = document.getElementById("modalClose");
+
+    function openModal(title, html) {
+      modalTitle.textContent = title;
+      modalBody.innerHTML = html;
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal() {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      modalBody.innerHTML = "";
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeModal();
+    });
+
+    function workCard(work, index) {
+      const color = colors[index % colors.length];
+      const buttons = [];
+      if (work.pdf) {
+        buttons.push(`<button class="button primary" type="button" data-preview="${encodeURI(work.pdf)}" data-title="${escapeHtml(work.title)}">在线预览</button>`);
+      }
+      if (work.web) {
+        buttons.push(`<a class="button primary" href="${work.web}" target="_blank" rel="noopener">打开作品</a>`);
+      }
+      if (work.ppt) {
+        buttons.push(`<a class="button teal" href="${work.ppt}" download>下载PPT</a>`);
+      }
+      if (!work.pdf && !work.web && !work.ppt) {
+        buttons.push(`<span class="button disabled">待补充</span>`);
+      }
+      return `
+        <article class="card work-card" style="--c:${color};--r:${index % 2 ? "1deg" : "-1deg"}">
+          <div>
+            <div class="work-top">
+              <div>
+                <div class="person">${work.person} · ${work.dept}</div>
+                <h3>${escapeHtml(work.title)}</h3>
+              </div>
+              <div class="num">${work.no}</div>
+            </div>
+            ${work.note ? `<p>${escapeHtml(work.note)}</p>` : `<p>${work.group === "team" ? "团队代表作路演" : "个人作品路演"}</p>`}
+          </div>
+          <div class="actions">${buttons.join("")}</div>
+        </article>
+      `;
+    }
+
+    function renderWorks() {
+      document.getElementById("personalWorks").innerHTML = works.filter(w => w.group === "personal").map(workCard).join("");
+      document.getElementById("teamWorks").innerHTML = works.filter(w => w.group === "team").map((w, i) => workCard(w, i + 11)).join("");
+      document.querySelectorAll("[data-preview]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const src = button.dataset.preview;
+          const title = button.dataset.title || "PPT 预览";
+          openModal(title, `<iframe src="${src}" title="${title}"></iframe>`);
+        });
+      });
+    }
+
+    function renderTools() {
+      document.getElementById("toolGrid").innerHTML = tools.map((tool, index) => `
+        <article class="card tool-card">
+          <div>
+            <div class="tool-name">
+              <strong>${escapeHtml(tool.name)}</strong>
+              <span class="tag" style="--c:${colors[index % colors.length]};--r:${index % 2 ? "1deg" : "-1deg"}">TOOL</span>
+            </div>
+            <p>${escapeHtml(tool.intro)}</p>
+          </div>
+          <div class="actions">
+            <a class="button primary" href="${tool.url}" target="_blank" rel="noopener">访问官网</a>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderPhotos() {
+      document.getElementById("photoGrid").innerHTML = photos.map((photo, index) => `
+        <button class="photo" type="button" data-photo="assets/photos/${photo}" aria-label="查看颁奖现场照片 ${index + 1}">
+          <img src="assets/photos/${photo}" alt="颁奖现场照片 ${index + 1}" loading="lazy">
+        </button>
+      `).join("");
+      document.querySelectorAll("[data-photo]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const src = button.dataset.photo;
+          openModal("颁奖现场", `<img src="${src}" alt="颁奖现场高清照片">`);
+        });
+      });
+    }
+
+    document.getElementById("shareForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+      const shareText = [
+        formData.get("tool") || "",
+        formData.get("intro") || "",
+        formData.get("url") || "",
+        formData.get("person") || ""
+      ].join("\t");
+      if (TENCENT_FORM_URL) {
+        try {
+          await navigator.clipboard.writeText(shareText);
+          alert("已复制分享内容。腾讯文档打开后，可直接粘贴到表格中。");
+        } catch (error) {
+          window.prompt("请复制以下内容后粘贴到腾讯文档：", shareText);
+        }
+        window.open(TENCENT_FORM_URL, "_blank", "noopener");
+      } else {
+        alert("工具分享收集表链接尚未配置。请先把腾讯文档表单链接填入页面脚本中的 TENCENT_FORM_URL。");
+      }
+    });
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[char]));
+    }
+
+    renderWorks();
+    renderTools();
+    renderPhotos();
+  </script>
+</body>
+</html>

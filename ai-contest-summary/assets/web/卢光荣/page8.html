@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>总结 - Claude Code提效实践</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #fff; min-height: 100vh; }
+        .nav-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(26, 26, 46, 0.95); backdrop-filter: blur(10px); z-index: 100; padding: 15px 30px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-links { list-style: none; display: flex; gap: 20px; flex-wrap: wrap; }
+        .nav-links a { color: #a0a0a0; text-decoration: none; padding: 8px 15px; border-radius: 8px; transition: all 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: #00d9ff; background: rgba(0,217,255,0.1); }
+        .container { padding: 100px 50px 50px; max-width: 1200px; margin: 0 auto; }
+        h1 { font-size: 2.5rem; margin-bottom: 30px; background: linear-gradient(90deg, #00d9ff, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 1.8rem; color: #00d9ff; margin: 30px 0 15px; border-left: 4px solid #00d9ff; padding-left: 15px; }
+        p { font-size: 1.1rem; line-height: 1.8; color: #e0e0e0; margin-bottom: 15px; }
+        li { font-size: 1.1rem; line-height: 1.8; color: #d0d0d0; padding: 8px 0; padding-left: 25px; position: relative; }
+        li::before { content: "▸"; color: #00d9ff; position: absolute; left: 0; }
+        .image-container { margin: 20px 0; text-align: center; }
+        .image-container img { max-width: 100%; height: auto; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .conclusion-box { background: linear-gradient(135deg, rgba(0,217,255,0.15), rgba(0,255,136,0.15)); border-radius: 20px; padding: 40px; margin: 20px 0; border: 2px solid rgba(0,217,255,0.3); text-align: center; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; margin: 30px 0; }
+        .stat-card { background: rgba(0,217,255,0.1); border-radius: 15px; padding: 30px; text-align: center; border: 1px solid rgba(0,217,255,0.3); }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #00ff88; }
+        .stat-label { color: #a0a0a0; margin-top: 10px; }
+        .btn-prev { display: inline-block; background: rgba(255,255,255,0.1); color: #fff; padding: 12px 30px; border-radius: 30px; text-decoration: none; margin-top: 30px; transition: background 0.3s; }
+        .btn-prev:hover { background: rgba(255,255,255,0.2); }
+        .footer { text-align: center; padding: 30px; color: #888; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 50px; }
+        .thank-you { text-align: center; margin-top: 50px; }
+        .thank-you h2 { font-size: 2.5rem; color: #00ff88; border: none; padding: 0; }
+        .thank-you p { font-size: 1.2rem; color: #888; }
+    </style>
+</head>
+<body>
+    <header class="nav-header">
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">封面</a></li>
+                <li><a href="page2.html">背景与痛点</a></li>
+                <li><a href="page3.html">使用场景</a></li>
+                <li><a href="page4.html">提效操作</a></li>
+                <li><a href="page5.html">成果对比</a></li>
+                <li><a href="page6.html">移动端</a></li>
+                <li><a href="page7.html">迭代计划</a></li>
+                <li><a href="page8.html" class="active">总结</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>七、总结</h1>
+
+        <div class="conclusion-box">
+            <p style="font-size: 1.3rem;">
+                本次基于 Claude Code 的企业级项目开发提效实践，通过覆盖开发全流程的AI工具应用，有效解决了传统开发模式下
+                <span style="color: #ff6b6b; font-weight: bold;">重复劳动多、效率低、规范落地难、文档滞后</span>
+                等核心痛点，实现了
+                <span style="color: #00ff88; font-weight: bold;">开发效率与代码质量的双重提升</span>。
+            </p>
+        </div>
+
+        <div class="image-container">
+            <img src="images/image_1.jpeg" alt="总结回顾" />
+        </div>
+
+        <h2>核心成果回顾</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">+60%</div>
+                <div class="stat-label">开发效率提升</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">+65%</div>
+                <div class="stat-label">代码质量提升</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">+80%</div>
+                <div class="stat-label">规范落地率提升</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">+90%</div>
+                <div class="stat-label">文档同步率提升</div>
+            </div>
+        </div>
+
+        <h2>未来展望</h2>
+        <p>后续我们将持续优化提效流程，深化AI工具在团队研发中的应用，打造更高效、更规范的企业级Java项目开发模式。</p>
+
+        <div class="thank-you">
+            <h2>感谢聆听</h2>
+            <p>Q & A</p>
+        </div>
+
+        <a href="page7.html" class="btn-prev">← 上一页</a>
+    </div>
+
+    <footer class="footer">
+        <p>Claude Code 企业级项目开发提效实践 | 2026年5月</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>移动端 - Claude Code提效实践</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #fff; min-height: 100vh; }
+        .nav-header { position: fixed; top: 0; left: 0; right: 0; background: rgba(26, 26, 46, 0.95); backdrop-filter: blur(10px); z-index: 100; padding: 15px 30px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-links { list-style: none; display: flex; gap: 15px; flex-wrap: wrap; }
+        .nav-links a { color: #a0a0a0; text-decoration: none; padding: 8px 12px; border-radius: 8px; transition: all 0.3s; font-size: 0.9rem; }
+        .nav-links a:hover, .nav-links a.active { color: #00d9ff; background: rgba(0,217,255,0.1); }
+        .container { padding: 100px 50px 50px; max-width: 1200px; margin: 0 auto; }
+        h1 { font-size: 2.2rem; margin-bottom: 20px; background: linear-gradient(90deg, #00d9ff, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 1.5rem; color: #00d9ff; margin: 25px 0 15px; border-left: 4px solid #00d9ff; padding-left: 15px; }
+        h3 { font-size: 1.3rem; color: #00ff88; margin: 18px 0 10px; }
+        p { font-size: 1rem; line-height: 1.8; color: #e0e0e0; margin-bottom: 12px; }
+        li { font-size: 1rem; line-height: 1.8; color: #d0d0d0; padding: 6px 0; padding-left: 22px; position: relative; }
+        li::before { content: "▸"; color: #00d9ff; position: absolute; left: 0; }
+        .image-container { margin: 25px 0; text-align: center; }
+        .image-container img { max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+        .btn-next { display: inline-block; background: linear-gradient(90deg, #00d9ff, #00ff88); color: #1a1a2e; padding: 10px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 30px; transition: transform 0.3s; }
+        .btn-next:hover { transform: translateY(-3px); }
+        .btn-prev { display: inline-block; background: rgba(255,255,255,0.1); color: #fff; padding: 10px 25px; border-radius: 30px; text-decoration: none; margin-top: 30px; margin-right: 15px; transition: background 0.3s; }
+        .btn-prev:hover { background: rgba(255,255,255,0.2); }
+        .footer { text-align: center; padding: 25px; color: #888; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 50px; }
+        .pain-point { background: rgba(255, 100, 100, 0.1); border-left: 4px solid #ff6b6b; padding: 18px 22px; margin: 12px 0; border-radius: 0 8px 8px 0; }
+        .pain-point-title { color: #ff6b6b; font-size: 1.1rem; font-weight: bold; margin-bottom: 8px; }
+        .architecture { background: rgba(0,217,255,0.1); border: 1px solid rgba(0,217,255,0.3); border-radius: 10px; padding: 20px; margin: 20px 0; }
+        .arch-title { color: #00d9ff; font-weight: bold; margin-bottom: 12px; }
+        .flow-step { display: flex; align-items: center; gap: 15px; margin: 15px 0; }
+        .step-num { width: 30px; height: 30px; background: #00d9ff; color: #1a1a2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        .scene-card { background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); border-radius: 10px; padding: 20px; margin: 15px 0; }
+        .scene-title { color: #00ff88; font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <header class="nav-header">
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">封面</a></li>
+                <li><a href="page2.html">背景与痛点</a></li>
+                <li><a href="page3.html">提效操作</a></li>
+                <li><a href="page4.html" class="active">移动端</a></li>
+                <li><a href="page5.html">成果对比</a></li>
+                <li><a href="page6.html">迭代计划</a></li>
+                <li><a href="page7.html">总结</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>四、OpenClaw + Claude Code 移动端微信远程智能操控提效</h1>
+
+        
+
+        <h2>（一）场景与传统痛点</h2>
+        <p>传统企业级 JavaWeb 开发存在明显局限性：</p>
+        <div class="pain-point">
+            <div class="pain-point-title">必须值守电脑旁才能操作</div>
+            <p>离开电脑就无法处理开发、文档、排错工作</p>
+        </div>
+        <div class="pain-point">
+            <div class="pain-point-title">碎片化时间无法利用</div>
+            <p>外出、下班、出差时，临时小需求、简单 Bug、基础文档无人处理，只能积压到上班</p>
+        </div>
+        <div class="pain-point">
+            <div class="pain-point-title">远程调度困难</div>
+            <p>单人 / 小团队无法实现无人值守、远程调度 AI 编码</p>
+        </div>
+        <div class="pain-point">
+            <div class="pain-point-title">响应不及时</div>
+            <p>突发线上小问题、简单代码补全、接口文档更新，不能及时响应，影响研发效率</p>
+        </div>
+
+        <h2>（二）整体实现架构</h2>
+        <p>搭建 <strong>微信手机端 → OpenClaw 中控调度平台 → 本地 PC Claude Code</strong> 联动架构：</p>
+        <div class="architecture">
+            <div class="arch-title">核心架构说明：</div>
+            <ul>
+                <li>OpenClaw 作为中间调度中枢，负责接收微信消息、解析指令、远程操控电脑端 Claude Code</li>
+                <li>无需远程桌面、无需 VPN，只用手机微信就能隔空控制电脑上的 Claude Code</li>
+                <li>支持无人值守后台运行，电脑开机挂机即可，随时随地手机下发任务</li>
+            </ul>
+        </div>
+
+        <h2>（三）微信远程控制核心操作流程</h2>
+        <div class="flow-step">
+            <div class="step-num">1</div>
+            <p>手机微信发送标准化指令给 OpenClaw 机器人</p>
+        </div>
+        <div class="flow-step">
+            <div class="step-num">2</div>
+            <p>OpenClaw 自动解析意图，远程唤醒并操控本地 Claude Code</p>
+        </div>
+        <div class="flow-step">
+            <div class="step-num">3</div>
+            <p>Claude Code 自动执行编码、文档生成、Bug 日志分析排查</p>
+        </div>
+        <div class="flow-step">
+            <div class="step-num">4</div>
+            <p>执行完成后，OpenClaw 将代码结果、文档内容、Bug 修复方案回推到手机微信</p>
+        </div>
+        <div class="flow-step">
+            <div class="step-num">5</div>
+            <p>全程无需碰电脑，手机即可完成全流程操作</p>
+        </div>
+
+        <h2>（四）三大核心落地应用场景</h2>
+        <div class="image-container">
+            <img src="images/image_2.jpeg" alt="CLAUDE.md配置2" />
+        </div>
+        <h3>1. 手机远程自动编写各类技术文档</h3>
+        <p>外出时微信下发指令：</p>
+          <div class="image-container">
+            <img src="images/image_1.jpeg" alt="CLAUDE.md配置1" />
+        </div>
+
+       
+
+        <h3>2. 手机远程控制生成基础编码</h3>
+        <p>微信发送指令：</p>
+         <div class="image-container">
+            <img src="images/image_9.jpeg" alt="手机远程排查Bug1" />
+        </div>
+
+      
+        <div class="image-container">
+            <img src="images/image_8.jpeg" alt="手机远程生成编码2" />
+        </div>
+
+        <h3>3. 手机远程排查分析 Bug 与日志</h3>
+        <p>遇到线上报错，手机上传日志文件或粘贴报错信息：</p>
+       
+        <div class="image-container">
+            <img src="images/image_7.jpeg" alt="手机远程生成编码1" />
+        </div>
+         <div class="image-container">
+            <img src="images/image_6.jpeg" alt="手机远程编写文档" />
+        </div>
+        <div class="image-container">
+            <img src="images/image_5.jpeg" alt="移动端整体方案" />
+        </div>
+
+       
+
+        <a href="page3.html" class="btn-prev">← 上一页</a>
+        <a href="page5.html" class="btn-next">下一页 →</a>
+    </div>
+
+    <footer class="footer">
+        <p>Claude Code 企业级项目开发提效实践</p>
+    </footer>
+</body>
+</html>

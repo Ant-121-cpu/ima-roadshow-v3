@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OpenClaw · 团队 AI 执行平台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23faf6ef'/%3E%3Cpath d='M14 14h36v36H14z' fill='none' stroke='%23b8302e' stroke-width='4'/%3E%3Ctext x='32' y='38' text-anchor='middle' font-size='19' fill='%23b8302e'%3EAI%3C/text%3E%3C/svg%3E" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --paper: #faf6ef;
+  --paper-2: #f3ede0;
+  --ink: #1a1a1a;
+  --ink-2: #3a3a3a;
+  --ink-3: #6b6b6b;
+  --ink-4: #9a9a9a;
+  --seal: #b8302e;
+  --seal-2: #a02824;
+  --brown: #8b7355;
+  --gold: #b88a3e;
+  --line: #d8d0bf;
+  --line-soft: #e8e3d8;
+  --blue: #4a6fa5;
+  --orange: #c97e3e;
+  --green: #5a8a5a;
+  --violet: #8b5a96;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, "PingFang SC", "Songti SC", "Source Han Serif SC", "Noto Serif CJK SC", serif;
+  background:
+    linear-gradient(rgba(139, 115, 85, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 115, 85, 0.025) 1px, transparent 1px),
+    var(--paper);
+  background-size: 44px 44px;
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 60px 40px 120px;
+}
+
+.hero {
+  text-align: center;
+  padding: 78px 0 62px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+
+.hero::before {
+  content: "OPENCLAW · TEAM AI EXECUTION PLATFORM";
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.34em;
+  color: var(--brown);
+  margin-bottom: 30px;
+  padding-left: 0.34em;
+}
+
+.hero h1 {
+  font-family: "Songti SC", "Source Han Serif SC", serif;
+  font-size: 68px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.12;
+  margin-bottom: 24px;
+  padding-left: 0.12em;
+}
+
+.subtitle {
+  max-width: 680px;
+  margin: 0 auto;
+  font-size: 16px;
+  color: var(--ink-3);
+  line-height: 1.95;
+  letter-spacing: 0.05em;
+}
+
+.seal {
+  display: inline-block;
+  width: 72px;
+  height: 72px;
+  border: 2.5px solid var(--seal);
+  border-radius: 6px;
+  color: var(--seal);
+  font-family: "Songti SC", serif;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 31px;
+  padding: 5px 0;
+  letter-spacing: 0.05em;
+  transform: rotate(-2deg);
+  margin: 26px auto 0;
+  opacity: 0.88;
+}
+
+.hero-meta {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+
+.hero-meta .item { text-align: center; min-width: 96px; }
+.hero-meta .num {
+  font-family: "Songti SC", serif;
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--seal);
+  line-height: 1;
+}
+.hero-meta .lbl {
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 0.2em;
+  margin-top: 9px;
+  padding-left: 0.2em;
+}
+
+.section { padding: 78px 0 34px; }
+
+.section-num {
+  display: inline-block;
+  font-family: "Songti SC", serif;
+  font-size: 14px;
+  color: var(--brown);
+  letter-spacing: 0.3em;
+  margin-bottom: 12px;
+}
+
+.section h2 {
+  font-family: "Songti SC", serif;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--ink);
+  display: inline-block;
+}
+
+.section-sub {
+  font-size: 14px;
+  color: var(--ink-3);
+  margin: 4px 0 36px;
+  letter-spacing: 0.05em;
+}
+
+.tagline {
+  background: var(--paper-2);
+  border-left: 4px solid var(--seal);
+  padding: 30px 36px;
+  font-size: 18px;
+  line-height: 2;
+  color: var(--ink-2);
+  letter-spacing: 0.05em;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  background: white;
+}
+
+.info-grid .cell {
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 18px 24px;
+}
+
+.info-grid .cell .k {
+  font-size: 12px;
+  color: var(--brown);
+  letter-spacing: 0.2em;
+  margin-bottom: 6px;
+}
+
+.info-grid .cell .v {
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+.layers {
+  display: grid;
+  gap: 16px;
+}
+
+.layer {
+  background: white;
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--ink);
+  padding: 24px 28px;
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.layer:nth-child(2) { border-left-color: var(--brown); }
+.layer:nth-child(3) { border-left-color: var(--seal); }
+.layer:nth-child(4) { border-left-color: var(--gold); }
+
+.layer .lab {
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--brown);
+}
+.layer .name {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 6px;
+  letter-spacing: 0.05em;
+}
+.layer .desc {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.9;
+}
+.layer .desc strong {
+  display: inline-block;
+  background: var(--paper-2);
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-weight: 600;
+  margin: 2px 4px 2px 0;
+  font-size: 13px;
+}
+
+.matrix-wrap {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 36px;
+  border-radius: 4px;
+}
+
+.matrix {
+  display: grid;
+  grid-template-columns: 150px repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.matrix > div {
+  background: white;
+  padding: 16px;
+}
+
+.matrix .corner {
+  background: var(--paper-2);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  font-size: 11px;
+  color: var(--ink-4);
+}
+
+.matrix .head {
+  background: var(--paper-2);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 76px;
+}
+
+.matrix .row-head {
+  background: var(--paper-2);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brown);
+  letter-spacing: 0.14em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.matrix .cell-p {
+  min-height: 118px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.matrix .cell-p .pname {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+
+.matrix .cell-p .pdesc {
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.7;
+}
+
+.matrix .warm { background: #fdf4f0; }
+.matrix .gold { background: #fdfaf2; }
+.matrix .green { background: #f5f8f1; }
+
+.flow {
+  background: var(--paper-2);
+  padding: 40px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+}
+
+.flow-step {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.flow-step .label {
+  display: inline-block;
+  background: white;
+  border: 1px solid var(--line);
+  padding: 12px 24px;
+  border-radius: 2px;
+  font-size: 14px;
+  min-width: 260px;
+}
+
+.flow-step.final .label {
+  background: var(--seal);
+  color: var(--paper);
+  border-color: var(--seal);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.flow-arrow {
+  text-align: center;
+  color: var(--ink-4);
+  font-size: 20px;
+  margin: 4px 0;
+}
+
+.flow-multi {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.flow-multi span {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: 2px;
+  color: var(--ink-2);
+}
+
+.scenes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.scene {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 24px;
+  border-radius: 4px;
+}
+
+.scene .label {
+  font-size: 12px;
+  color: var(--brown);
+  letter-spacing: 0.2em;
+  margin-bottom: 8px;
+}
+
+.scene .title {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+
+.scene .items {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 2;
+}
+
+.scene .dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  background: var(--brown);
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.video-panel {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 18px;
+  margin-bottom: 18px;
+  border-radius: 4px;
+  box-shadow: 0 12px 28px rgba(70, 50, 25, 0.06);
+}
+
+.video-panel video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--paper-2);
+  border: 1px solid var(--line-soft);
+  border-radius: 2px;
+}
+
+.video-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 14px;
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+}
+
+.video-caption strong {
+  color: var(--brown);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+.report-flow {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 12px 28px;
+}
+
+.seg {
+  display: grid;
+  grid-template-columns: 70px 1fr 160px;
+  gap: 22px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line-soft);
+  align-items: center;
+}
+.seg:last-child { border-bottom: none; }
+.seg .num {
+  font-family: "Songti SC", serif;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--seal);
+  text-align: center;
+}
+.seg .body .title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  letter-spacing: 0.05em;
+}
+.seg .body .desc {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.seg .meta {
+  font-size: 12px;
+  color: var(--ink-3);
+  text-align: right;
+}
+.seg .meta .density {
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+
+.biz {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.biz-card {
+  background: white;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--ink);
+  padding: 24px;
+}
+.biz-card.cta { border-top-color: var(--seal); }
+.biz-card .lab {
+  font-size: 12px;
+  color: var(--brown);
+  letter-spacing: 0.2em;
+  margin-bottom: 8px;
+}
+.biz-card .title {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.biz-card .desc {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.9;
+}
+
+.footer {
+  margin-top: 100px;
+  padding-top: 30px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-4);
+  letter-spacing: 0.2em;
+}
+
+.toc {
+  position: fixed;
+  top: 50%;
+  left: 24px;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(250, 246, 239, 0.92);
+  border: 1px solid var(--line);
+  padding: 16px 14px;
+  border-radius: 2px;
+  backdrop-filter: blur(8px);
+}
+.toc a {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-3);
+  text-decoration: none;
+  padding: 4px 0 4px 10px;
+  letter-spacing: 0.1em;
+  border-left: 2px solid transparent;
+}
+.toc a:hover {
+  color: var(--seal);
+  border-left-color: var(--seal);
+}
+
+@media (max-width: 1280px) {
+  .toc { display: none; }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 30px 20px 60px; }
+  .hero h1 { font-size: 42px; }
+  .hero-meta { gap: 24px; }
+  .info-grid, .scenes, .biz { grid-template-columns: 1fr; }
+  .layer { grid-template-columns: 1fr; }
+  .matrix { grid-template-columns: 90px repeat(3, 1fr); }
+  .matrix .cell-p { min-height: 96px; padding: 12px 8px; }
+  .matrix .cell-p .pname { font-size: 13px; }
+  .matrix .cell-p .pdesc { font-size: 11px; }
+  .seg { grid-template-columns: 44px 1fr; }
+  .seg .meta { display: none; }
+  .video-panel { padding: 10px; }
+  .video-caption { display: block; line-height: 1.8; }
+}
+</style>
+</head>
+<body>
+<nav class="toc">
+  <a href="#hero">主题</a>
+  <a href="#tagline">定位</a>
+  <a href="#core">优势</a>
+  <a href="#flow">流程</a>
+  <a href="#pain">痛点</a>
+  <a href="#deliver">交付</a>
+  <a href="#current">当前</a>
+  <a href="#future">扩展</a>
+  <a href="#risk">治理</a>
+</nav>
+
+<div class="container">
+  <header class="hero" id="hero">
+    <h1>OpenClaw<br>团队执行平台</h1>
+    <p class="subtitle">飞书只是入口，OpenClaw 才是中间的执行层：它把 Codex、脚本、浏览器、文件处理和外部系统串起来，让团队用一句话触发可复用的业务流程。</p>
+    <div class="seal">执行<br>中枢</div>
+    <div class="hero-meta">
+      <div class="item"><div class="num">1</div><div class="lbl">统一入口</div></div>
+      <div class="item"><div class="num">4</div><div class="lbl">交付形态</div></div>
+      <div class="item"><div class="num">9</div><div class="lbl">扩展方向</div></div>
+      <div class="item"><div class="num">N</div><div class="lbl">团队技能</div></div>
+    </div>
+  </header>
+
+  <section class="section" id="tagline">
+    <div class="section-num">〇 · 定位</div>
+    <h2>一句话定位</h2>
+    <div class="section-sub">这套系统对团队真正改变的不是某个插件，而是把 AI 从“聊天”推进到“执行”</div>
+    <div class="tagline">
+      OpenClaw 的价值不是“能不能爬一次数据”，而是把<strong style="color:var(--seal); padding:0 4px;">自然语言指令</strong>接到<strong style="color:var(--seal); padding:0 4px;">确定性执行器</strong>。<br>
+      任何可脚本化、可调用工具、可沉淀结果的团队动作，都可以逐步变成团队共享的 AI 工作流。
+    </div>
+  </section>
+
+  <section class="section" id="core">
+    <div class="section-num">一 · 团队优势</div>
+    <h2>四个核心优势</h2>
+    <div class="section-sub">从个人会用 AI，升级为团队拥有 AI 执行基础设施</div>
+    <div class="info-grid">
+      <div class="cell"><div class="k">组织入口</div><div class="v">每个人都在飞书里发起任务，不需要额外学习命令行、脚本路径和本地环境。</div></div>
+      <div class="cell"><div class="k">能力共享</div><div class="v">一个人搭好的执行流程、模板和回流链路，可以被整个团队复用。</div></div>
+      <div class="cell"><div class="k">结果沉淀</div><div class="v">输出直接落到飞书多维表格、共享文件夹、文档和聊天记录里，方便复盘和协作。</div></div>
+      <div class="cell"><div class="k">权限清晰</div><div class="v">谁发起、结果发给谁、文件放到哪个文件夹，都能围绕飞书 open_id 和群聊关系管理。</div></div>
+    </div>
+  </section>
+
+  <section class="section" id="flow">
+    <div class="section-num">二 · 执行链路</div>
+    <h2>从一句话到可交付结果</h2>
+    <div class="section-sub">整个链路标准化，不需要每次临时解释怎么跑</div>
+    <div class="flow">
+      <div class="flow-step"><span class="label">飞书发起：同事发送一句自然语言</span></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-multi">
+        <span>OpenClaw 接入</span><span>Codex 理解任务</span><span>选择执行器</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-multi">
+        <span>脚本</span><span>浏览器</span><span>文件处理</span><span>数据分析</span><span>API 调用</span>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step"><span class="label">结果整理：表格 / 图表 / 文档 / 链接</span></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step final"><span class="label">飞书回流：个人、群聊、共享文件夹、多维表格</span></div>
+    </div>
+  </section>
+
+  <section class="section" id="pain">
+    <div class="section-num">三 · 痛点压缩</div>
+    <h2>它解决了什么</h2>
+    <div class="section-sub">不是某个小功能能不能跑，而是把重复动作、协作摩擦和交付碎片化一起压掉</div>
+    <div class="layers">
+      <div class="layer"><div><div class="lab">Before</div><div class="name">手工执行</div></div><div class="desc">每次都要手工搜资料、筛链接、复制结果，时间成本高，且不同人用不同机器，登录态、环境和路径不一致。</div></div>
+      <div class="layer"><div><div class="lab">Before</div><div class="name">结果分散</div></div><div class="desc">结果散在聊天、截图、本地文件里，难复用、难审阅，做完之后还要再整理成汇报材料。</div></div>
+      <div class="layer"><div><div class="lab">After</div><div class="name">统一闭环</div></div><div class="desc"><strong>统一入口</strong><strong>统一执行</strong><strong>统一存储</strong><strong>统一分发</strong><strong>统一清理</strong>，一条链路完成从需求到结果的回流。</div></div>
+    </div>
+  </section>
+
+  <section class="section" id="deliver">
+    <div class="section-num">四 · 平台交付形态</div>
+    <h2>已经能出什么</h2>
+    <div class="section-sub">不是一次性 demo，而是已经能出成品的平台能力</div>
+    <div class="matrix-wrap">
+      <div class="matrix">
+        <div class="corner">交付 × 用途</div>
+        <div class="head">结构化结果</div>
+        <div class="head">汇报材料</div>
+        <div class="head">协作归档</div>
+        <div class="row-head">交付形态</div>
+        <div class="cell-p gold"><div class="pname">多维表格</div><div class="pdesc">承载结构化结果，方便筛选、复查、二次分析。</div></div>
+        <div class="cell-p warm"><div class="pname">图文材料</div><div class="pdesc">把执行结果变成管理层能看的图和文档。</div></div>
+        <div class="cell-p green"><div class="pname">共享文件夹</div><div class="pdesc">结果可共享、可检索，不再依赖本机目录。</div></div>
+        <div class="row-head">回流方式</div>
+        <div class="cell-p gold"><div class="pname">个人消息</div><div class="pdesc">执行结果回到发起人，形成闭环。</div></div>
+        <div class="cell-p warm"><div class="pname">群聊同步</div><div class="pdesc">关键结果直接发到项目群，减少转述。</div></div>
+        <div class="cell-p green"><div class="pname">文件归档</div><div class="pdesc">按成员、项目、群聊自动沉淀。</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="current">
+    <div class="section-num">五 · 当前能力</div>
+    <h2>目前可以做什么</h2>
+    <div class="section-sub">所有可以被“自然语言 + 执行器”接管的团队任务，都可以纳入这个入口</div>
+    <div class="video-panel">
+      <video controls preload="metadata" playsinline poster="assets/feishu-demo-poster.jpg">
+        <source src="assets/feishu-demo.mp4" type="video/mp4" />
+        当前浏览器不支持内嵌视频播放。
+      </video>
+      <div class="video-caption">
+        <span><strong>DEMO</strong> 飞书内发起 OpenClaw 任务的实际操作录屏</span>
+        <span>入口统一 · 执行自动 · 结果回流</span>
+      </div>
+    </div>
+    <div class="scenes">
+      <div class="scene"><div class="label">CAPABILITY 01</div><div class="title">任务路由</div><div class="items"><span class="dot"></span>接收飞书消息，自动转成可执行任务<br><span class="dot"></span>按任务类型分发到对应执行器</div></div>
+      <div class="scene"><div class="label">CAPABILITY 02</div><div class="title">脚本调用</div><div class="items"><span class="dot"></span>接现成脚本、浏览器流程、文件处理<br><span class="dot"></span>把个人能力变成团队共享能力</div></div>
+      <div class="scene"><div class="label">CAPABILITY 03</div><div class="title">结果入库</div><div class="items"><span class="dot"></span>输出进入多维表格、文档或文件夹<br><span class="dot"></span>方便复查、检索和二次加工</div></div>
+      <div class="scene"><div class="label">CAPABILITY 04</div><div class="title">消息回流</div><div class="items"><span class="dot"></span>结果回到个人或群聊<br><span class="dot"></span>形成“发起—执行—交付”的闭环</div></div>
+    </div>
+  </section>
+
+  <section class="section" id="future">
+    <div class="section-num">六 · 扩展路线</div>
+    <h2>未来还能扩展什么</h2>
+    <div class="section-sub">扩展方向不是继续加爬虫，而是接管更多团队动作</div>
+    <div class="report-flow">
+      <div class="seg"><div class="num">01</div><div class="body"><div class="title">会议纪要</div><div class="desc">自动整理录音、聊天记录和待办，生成行动项和责任人。</div></div><div class="meta"><span class="density">高频</span><span class="word">会议后</span></div></div>
+      <div class="seg"><div class="num">02</div><div class="body"><div class="title">周报月报</div><div class="desc">把零散进展自动汇总成周报、月报或管理层简报。</div></div><div class="meta"><span class="density">周期</span><span class="word">周/月</span></div></div>
+      <div class="seg"><div class="num">03</div><div class="body"><div class="title">审批流</div><div class="desc">接入“提需求、执行、确认、回流”的团队流程。</div></div><div class="meta"><span class="density">可控</span><span class="word">权限</span></div></div>
+      <div class="seg"><div class="num">04</div><div class="body"><div class="title">知识库</div><div class="desc">把文档、链接、结论和 FAQ 自动归档成可检索知识库。</div></div><div class="meta"><span class="density">沉淀</span><span class="word">长期</span></div></div>
+      <div class="seg"><div class="num">05</div><div class="body"><div class="title">数据同步</div><div class="desc">同步表格、项目状态、CRM 或内部系统的关键字段。</div></div><div class="meta"><span class="density">跨系统</span><span class="word">自动</span></div></div>
+      <div class="seg"><div class="num">06</div><div class="body"><div class="title">任务助手</div><div class="desc">自动拆解任务、提醒跟进、跨群回流，形成长期执行闭环。</div></div><div class="meta"><span class="density">闭环</span><span class="word">跟进</span></div></div>
+      <div class="seg"><div class="num">07</div><div class="body"><div class="title">内容生产</div><div class="desc">把素材、数据和观点自动整理成公众号、小红书、汇报稿、销售话术。</div></div><div class="meta"><span class="density">增长</span><span class="word">内容</span></div></div>
+      <div class="seg"><div class="num">08</div><div class="body"><div class="title">研发与数据助手</div><div class="desc">接入代码仓库、报错日志、数据表和接口文档，辅助排查、生成脚本、产出分析。</div></div><div class="meta"><span class="density">提效</span><span class="word">技术</span></div></div>
+      <div class="seg"><div class="num">09</div><div class="body"><div class="title">客户与运营支持</div><div class="desc">整理客户反馈、工单、群聊线索和运营数据，自动形成问题分层和跟进建议。</div></div><div class="meta"><span class="density">业务</span><span class="word">运营</span></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="risk">
+    <div class="section-num">七 · 治理</div>
+    <h2>好处与风险控制</h2>
+    <div class="section-sub">汇报时不要只讲收益，也要说明为什么它可控、可复用、可维护</div>
+    <div class="biz">
+      <div class="biz-card cta"><div class="lab">BENEFIT</div><div class="title">主要好处</div><div class="desc">把重复采集和整理动作从人工变成标准链路；场景可切换，流程不变；飞书作为天然分发中心，方便多人查看和转发；任务、结果和文档都落在统一空间里，能持续迭代。</div></div>
+      <div class="biz-card"><div class="lab">CONTROL</div><div class="title">风险控制</div><div class="desc">使用缓存登录态或授权态；缺少 receive_id 时降级到链接交付；OpenClaw、skill 和脚本保持同步；结果默认清理，减少机器上的临时文件污染。</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-num">八 · 结论</div>
+    <div class="tagline">
+      我们把 OpenClaw 建成了<strong style="color:var(--seal); padding:0 4px;">团队 AI 执行平台</strong>，飞书只是团队成员最容易使用的入口。<br>
+      对个人来说，只要发一句话；对团队来说，得到的是一套可复制、可协作、可扩展、可沉淀的自动化工作流。
+    </div>
+  </section>
+
+  <div class="footer">OPENCLAW × FEISHU · TEAM AI OPERATING LAYER</div>
+</div>
+</body>
+</html>
